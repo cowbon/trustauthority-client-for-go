@@ -62,9 +62,12 @@ type azRuntimeData struct {
 //		}
 //	  }
 type azRuntimeJson struct {
-	Keys            []azKey           `json:"keys"`
-	UserData        string            `json:"user-data"`
-	VmConfiguration azVmConfiguration `json:"vm-configuration"`
+	Keys     []azKey `json:"keys"`
+	UserData string  `json:"user-data"`
+	// VmConfiguration is a json that holds the VM configuration data from Azure.
+	// The keys and values are dynamic and can vary based on the Azure VM configuration.
+	// Client does not need to parse this data, but it is included for completeness.
+	VmConfiguration map[string]interface{} `json:"vm-configuration"`
 }
 
 type azKey struct {
@@ -73,16 +76,6 @@ type azKey struct {
 	Kid    string   `json:"kid"`
 	Kty    string   `json:"kty"`
 	N      string   `json:"n"`
-}
-
-type azVmConfiguration struct {
-	ConsoleEnabled             bool   `json:"console-enabled"`
-	RootCertThumbprint         string `json:"root-cert-thumbprint"`
-	SecureBoot                 bool   `json:"secure-boot"`
-	TpmEnabled                 bool   `json:"tpm-enabled"`
-	TpmPersisted               bool   `json:"tpm-persisted"`
-	VmUniqueId                 string `json:"vmUniqueId"`
-	FilteredVpciDevicesAllowed bool   `json:"filtered-vpci-devices-allowed"`
 }
 
 func newAzRuntimeData(data []byte) (*azRuntimeData, error) {
